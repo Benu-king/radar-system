@@ -1,190 +1,164 @@
-.
 
-🛰️ Benu Radar Scanning System
+---
 
-👤 Author: Benayas Wondwosen
+```
+┌───────────────────────────────────────────────────────────────┐
+│                     🛰️ Benu Radar Scanning System              │
+│                     Author: Benayas Wondwosen                 │
+└───────────────────────────────────────────────────────────────┘
+```
 
-🧠 Project Overview
+## 🧠 **Project Overview**
 
-The Benu Radar Scanning System is a real-time ultrasonic radar visualizer built using Arduino and Processing.
+The **Benu Radar Scanning System** is a real-time ultrasonic radar visualizer built using **Arduino + Processing**.
+The Arduino sweeps an ultrasonic sensor across a set angle range, sends distance readings to Processing, and Processing renders a live **military-style radar interface**.
 
-The Arduino sweeps an ultrasonic sensor across an angle range and sends distance data to Processing, which renders a live animated radar UI similar to real military-style scanners.
+**System Includes:**
 
-The system performs:
+* Continuous servo sweep *(15° → 165° → 15°)*
+* Live ultrasonic distance measurement
+* LED alert when object is close
+* Full radar visual UI in Processing
+* Real-time object detection + tracking
 
-Continuous servo sweep (15° → 165° → 15°)
+Perfect for security projects, robotics, mapping, and visualization learning.
 
-Ultrasonic distance measurement
+---
 
-LED blinking alert when an object is close
+```
+┌───────────────────────────────────────────┐
+│           ⚙️ Hardware Requirements         │
+└───────────────────────────────────────────┘
+```
 
-Real-time radar visualization using Processing
+* Arduino UNO / Nano / Mega
+* HC-SR04 Ultrasonic Sensor
+* SG90 / MG995 Servo Motor
+* LED for alert (optional)
+* Jumper wires
+* USB cable
+* Computer with Processing installed
 
-Object detection and distance plotting
+---
 
-This project is perfect for robotics, security systems, mapping, and visualization learning.
+```
+┌───────────────────────────────────────────┐
+│           🧠 Software Requirements         │
+└───────────────────────────────────────────┘
+```
 
-⚙️ Hardware Requirements
+### Processing
 
-Arduino UNO/Nano/Mega
+Uses built-in library:
 
-HC-SR04 Ultrasonic Sensor
+* `processing.serial.*` (no installation needed)
 
-SG90/MG995 Servo Motor
+### Arduino IDE
 
-LED (optional proximity alert)
+Libraries used (built-in):
 
-Jumper wires
+* `Servo.h`
 
-USB cable
+---
 
-PC with Processing installed
+```
+┌───────────────────────────────────────────┐
+│                🔌 Arduino Setup            │
+└───────────────────────────────────────────┘
+```
 
-🧠 Software Requirements
-Processing Libraries
+**File:** `benu_radar_system.ino`
+⚠️ *The code is already uploaded — no need to include it in the README.*
+Just instruct users to **download it and upload to Arduino**.
 
-Built-in libraries (no installation needed):
+**Steps:**
 
-processing.serial.*
+1. Download the Arduino file
+2. Open with Arduino IDE
+3. Select your board + COM port
+4. Upload the sketch
 
-Arduino IDE
+---
 
-No extra libraries required except:
+```
+┌───────────────────────────────────────────┐
+│              🧩 Processing Setup           │
+└───────────────────────────────────────────┘
+```
 
-Servo.h (built-in)
+**File:** `benu_radar_visualizer.pde`
 
-🔌 Arduino Setup
+Edit the COM port line to match your device:
 
-File: benu_radar_system.ino
+```processing
+myPort = new Serial(this, "COM9", 9600);
+```
 
-Upload this code to your Arduino:
+Then run the Processing sketch to start the radar interface.
 
-#include <Servo.h>
+---
 
-const int trigPin = 10;
-const int echoPin = 11;
-const int ledPin = 9;
+```
+┌───────────────────────────────────────────┐
+│              🧪 Running the Project        │
+└───────────────────────────────────────────┘
+```
 
-long duration;
-int distance;
-Servo myServo;
+1. Connect Arduino via USB
+2. Upload the Arduino sketch
+3. Run the Processing program
+4. Watch the radar animate 🎯
 
-void setup() {
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
-  pinMode(ledPin, OUTPUT);
-  Serial.begin(9600);
-  myServo.attach(12);
-}
+**You’ll see:**
 
-void loop() {
-  for(int i = 15; i <= 165; i++) {
-    myServo.write(i);
-    delay(15);
-    distance = calculateDistance();
-    Serial.print(i);
-    Serial.print(",");
-    Serial.print(distance);
-    Serial.print(".");
-    blinkLED(distance);
-  }
+* Rotating radar sweep line
+* Green distance rings
+* Red object detection points
+* Live angle + distance readings
+* Smooth animated interface
 
-  for(int i = 165; i > 15; i--) {
-    myServo.write(i);
-    delay(15);
-    distance = calculateDistance();
-    Serial.print(i);
-    Serial.print(",");
-    Serial.print(distance);
-    Serial.print(".");
-    blinkLED(distance);
-  }
-}
+---
 
-int calculateDistance() {
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-  duration = pulseIn(echoPin, HIGH);
-  distance = duration * 0.034 / 2;
-  return distance;
-}
+```
+┌───────────────────────────────────────────┐
+│              🧾 Features Summary           │
+└───────────────────────────────────────────┘
+```
 
-void blinkLED(int d) {
-  if (d > 0 && d < 40) {
-    int blinkDelay = map(d, 1, 40, 30, 300);
-    digitalWrite(ledPin, HIGH);
-    delay(blinkDelay);
-    digitalWrite(ledPin, LOW);
-    delay(blinkDelay);
-  } else {
-    digitalWrite(ledPin, LOW);
-  }
-}
+| Feature                 | Description                   |
+| ----------------------- | ----------------------------- |
+| 🔄 Servo Sweep          | Automatic 15° → 165° scanning |
+| 📡 Distance Measurement | Live ultrasonic readings      |
+| 🖥️ Radar UI            | Processing visualization      |
+| 🎯 Object Detection     | Detects objects < 40 cm       |
+| 💡 LED Alert            | Faster blink = closer object  |
+| ⚡ Real-Time             | Smooth serial + UI updates    |
 
+---
 
-✅ Upload using Arduino IDE
-✅ Note your COM port (e.g., COM4 or COM9)
+```
+┌───────────────────────────────────────────┐
+│               🛠️ Troubleshooting           │
+└───────────────────────────────────────────┘
+```
 
-🧩 Processing Setup
-
-File: benu_radar_visualizer.pde
-
-Edit this line to match your COM port:
-
-myPort = new Serial(this,"COM9", 9600);
-
-
-Then run the Processing sketch.
-
-🧪 Running the Project
-
-Connect your Arduino via USB
-
-Upload the Arduino sketch
-
-Run the Processing program
-
-Watch the radar come alive 🎯
-
-You will see:
-
-A rotating radar sweep line
-
-Green distance rings
-
-Detected objects marked in red
-
-Live angle and distance data
-
-Smooth animated UI
-
-🧾 Features Summary
-Feature	Description
-🔄 Servo Sweep	Automated 15° → 165° scanning
-📡 Distance Measurement	HC-SR04 live ultrasonic readings
-🖥️ Radar UI	Processing-based visualization
-🎯 Object Detection	Displays objects under 40 cm
-💡 LED Alert	Blinks faster when objects are close
-⚡ Real-Time	Smooth animation + live serial data
-🛠️ Troubleshooting
-❌ “Serial port not found”
-
-✔ Change "COM9" to your port
+**❌ Serial port not found**
+✔ Change `"COM9"` to your actual port
 ✔ Close Arduino Serial Monitor
 
-❌ Processing shows no radar
-
+**❌ Radar not showing in Processing**
 ✔ Check Arduino is running
-✔ Make sure baud is 9600
+✔ Ensure baud rate = `9600`
 
-❌ Servo shaking or glitching
+**❌ Servo shaking**
+✔ Use external 5V for servo
+✔ Connect all grounds together
 
-✔ Use external 5V supply
-✔ Common ground required
+---
 
-❤️ Made by Benayas Wondwosen
-
-🛠️ A project from Nafiyas Solution – Embedded Systems Division
+```
+┌───────────────────────────────────────────────────────────┐
+│        ❤️ Made by Benayas Wondwosen — Nafiyas Solution     │
+│                Embedded Systems Division                   │
+└───────────────────────────────────────────────────────────┘
+```
